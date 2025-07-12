@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import RichTextEditor from '../RichTextEditor/RichTextEditor';
 import { createAnswer } from '../../api/answers';
 
@@ -7,7 +7,7 @@ const AnswerForm = ({ questionId, onAnswerSubmitted }) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(useAuth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
-import { getQuestionById, voteQuestion } from '../api/questions';
-import { getAnswersByQuestionId } from '../api/answers';
+import { useAuth } from '../contexts/AuthContext';
+import { getQuestion, voteQuestion } from '../api/questions';
+import { getAnswers } from '../api/answers';
 import AnswerList from '../components/Answers/AnswerList';
 import AnswerForm from '../components/Answers/AnswerForm';
 import { ChevronUp, ChevronDown, Eye, Clock, User, Tag, ArrowLeft } from 'lucide-react';
@@ -10,7 +10,7 @@ import { ChevronUp, ChevronDown, Eye, Clock, User, Tag, ArrowLeft } from 'lucide
 const QuestionDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth(); // Fixed: Use the hook instead of useContext
   
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -19,27 +19,27 @@ const QuestionDetailPage = () => {
   const [votingError, setVotingError] = useState('');
 
   useEffect(() => {
-    fetchQuestionAndAnswers();
-  }, [id]);
+    const fetchQuestionAndAnswers = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch question details
+        const questionData = await getQuestion(id);
+        setQuestion(questionData);
+        
+        // Fetch answers
+        const answersData = await getAnswers(id);
+        setAnswers(answersData);
+        
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to load question');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchQuestionAndAnswers = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch question details
-      const questionData = await getQuestionById(id);
-      setQuestion(questionData);
-      
-      // Fetch answers
-      const answersData = await getAnswersByQuestionId(id);
-      setAnswers(answersData);
-      
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load question');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchQuestionAndAnswers();
+  }, [id]); // Now only depends on id
 
   const handleVote = async (voteType) => {
     if (!user) {

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuth} from '../../contexts/AuthContext';
 import RichTextEditor from '../RichTextEditor/RichTextEditor';
 import { createQuestion } from '../../api/questions';
 import { X } from 'lucide-react';
@@ -13,7 +13,7 @@ const AskQuestionForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(useAuth);
   const navigate = useNavigate();
 
   const handleAddTag = (e) => {

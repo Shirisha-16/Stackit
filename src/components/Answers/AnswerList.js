@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { voteAnswer, acceptAnswer } from '../../api/answers';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 
 const AnswerList = ({ answers, questionAuthor, onAnswerUpdate }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(useAuth);
 
   const handleVote = async (answerId, voteType) => {
     if (!user) {
