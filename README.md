@@ -41,8 +41,8 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/qa-platform.git
-cd qa-platform
+git clone https://github.com/Shirisha-16/Stackit.git
+cd Stackit
 ```
 
 ### 2. Backend Setup
